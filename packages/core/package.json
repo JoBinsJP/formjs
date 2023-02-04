@@ -20,7 +20,8 @@
         }
     },
     "scripts": {
-        "build": "tsc && vite build"
+        "build": "tsc && vite build",
+        "prepublishOnly": "yarn run build"
     },
     "dependencies": {
         "axios": "^1.2.0"
