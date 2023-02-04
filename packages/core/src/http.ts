@@ -1,7 +1,8 @@
 import { default as Axios } from "axios"
-import { VisitOptions } from "./types"
+import { hasFiles } from "./files"
+import { objectToFormData } from "./formData"
+import { RequestPayload, VisitOptions } from "./types"
 import { hrefToUrl, urlWithoutHash } from "./url"
-import { hasFiles } from './files'
 
 export class Http {
     public visit(
@@ -29,17 +30,16 @@ export class Http {
             params: method === "get" ? data : {},
             headers: {
                 ...headers,
-                Accept: "text/html, application/xhtml+xml",
+                Accept: "application/json",
+                "Content-Type": "application/json",
                 "X-Requested-With": "XMLHttpRequest",
             },
         }).then((response) => {
-
-        }).then(() => {
-            const errors = this.page.props.errors || {}
+            const errors = response.data.errors || {}
             if (Object.keys(errors).length > 0) {
-
+                return onError(errors)
             }
-            return onSuccess()
+            return onSuccess(response.data)
         }).catch((error) => {
             return Promise.reject(error)
         }).then(() => {
@@ -49,5 +49,31 @@ export class Http {
         })
     }
 
-)
+    public get(
+        url: URL | string,
+        data: RequestPayload = {},
+        options: Exclude<VisitOptions, "method" | "data"> = {},
+    ): void {
+        return this.visit(url, { ...options, method: "get", data })
+    }
+
+    public post(
+        url: URL | string,
+        data: RequestPayload = {},
+        options: Exclude<VisitOptions, "method" | "data"> = {},
+    ): void {
+        return this.visit(url, { ...options, method: "post", data })
+    }
+
+    public put(
+        url: URL | string,
+        data: RequestPayload = {},
+        options: Exclude<VisitOptions, "method" | "data"> = {},
+    ): void {
+        return this.visit(url, { ...options, method: "put", data })
+    }
+
+    public delete(url: URL | string, options: Exclude<VisitOptions, "method"> = {}): void {
+        return this.visit(url, { ...options, method: "delete" })
+    }
 }
