@@ -59,8 +59,8 @@ export type GlobalEventCallback<TEventName extends GlobalEventNames> = (
     ...params: GlobalEventParameters<TEventName>
 ) => GlobalEventResult<TEventName>
 
-export type VisitOptions = Partial<Visit> & {
+export type VisitOptions = Partial<Visit & {
     onFinish: GlobalEventCallback<"finish">
     onSuccess: GlobalEventCallback<"success">
     onError: GlobalEventCallback<"error">
-}
+}>
