@@ -1,6 +1,6 @@
 {
     "name": "formjs-core",
-    "version": "0.0.1",
+    "version": "0.0.11",
     "type": "module",
     "contributors": [
         "Bedram Tamang <tmgbedu@gmail.com>"
@@ -11,8 +11,10 @@
     ],
     "main": "./dist/index.umd.cjs",
     "module": "./dist/index.js",
+    "types": "types/index.d.ts",
     "exports": {
         ".": {
+            "types": "./types/index.d.ts",
             "import": "./dist/index.js",
             "require": "./dist/index.umd.cjs"
         }
