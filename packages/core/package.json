@@ -20,7 +20,7 @@
         }
     },
     "scripts": {
-        "build": "npm run clean && tsc && vite build",
+        "build": "npm run clean && tsc --emitDeclarationOnly && vite build",
         "clean": "rm -rf types && rm -rf dist",
         "prepublishOnly": "yarn run build"
     },
