@@ -1,2 +1,8 @@
 .idea
 node_modules
+
+.pnp.cjs
+.yarnrc.yml
+.pnp.*
+.yarn
+yarn.lock

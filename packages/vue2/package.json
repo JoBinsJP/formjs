@@ -8,13 +8,17 @@
         "clean": "rm -rf types && rm -rf dist",
         "prepublishOnly": "yarn run build"
     },
-    "dependencies": {},
+    "dependencies": {
+        "formjs-core": "^0.0.14",
+        "lodash.clonedeep": "^4.5.0",
+        "lodash.isequal": "^4.5.0"
+    },
     "devDependencies": {
         "@vitejs/plugin-vue2": "^2.2.0",
         "typescript": "^4.9.3",
-        "vue": "^2.7.0",
         "vite": "^3.0.0",
-        "vitest": "^0.15.1"
+        "vitest": "^0.15.1",
+        "vue": "^2.7.0"
     },
     "peerDependencies": {
         "vue": "^2.7.0"
