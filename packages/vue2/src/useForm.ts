@@ -27,9 +27,6 @@ interface FormProps<TForm> {
 
 type Form<TForm> = TForm & FormProps<TForm>
 
-export interface FormTrait {
-    form<TForm>(data: TForm): Form<TForm>
-}
 export default function useForm<TForm>(data: TForm): Form<TForm>
 export default function useForm<TForm>(...args): Form<TForm> {
     const data = args[0] || {}
@@ -37,6 +34,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
     let transform = (data) => data
 
     const form = Vue.observable({
+        ...data,
         isDirty: false,
         errors: {},
         hasErrors: false,
