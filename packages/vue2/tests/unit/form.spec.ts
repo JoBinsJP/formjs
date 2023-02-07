@@ -1,4 +1,4 @@
-import {useForm} from "../../src"
+import {useForm} from "formjs-vue2"
 import {expect, it,} from "vitest"
 
 it("it correctly initializes the default data", () => {
