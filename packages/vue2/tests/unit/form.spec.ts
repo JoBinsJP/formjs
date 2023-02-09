@@ -1,5 +1,11 @@
-import {useForm} from "formjs-vue2"
-import {expect, it,} from "vitest"
+import Axios from "axios"
+import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
+import { useForm } from "~formjs-vue2"
+import { server } from "../mocks/server"
+
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
 it("it correctly initializes the default data", () => {
     const form = useForm({

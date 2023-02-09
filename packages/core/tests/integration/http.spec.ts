@@ -1,21 +1,29 @@
-import {http} from "../../src"
-import {server} from "../mocks/server"
-import {beforeAll, expect, assert, it} from 'vitest'
+import { afterAll, afterEach, assert, beforeAll, expect, it } from "vitest"
+import { http } from "~formjs-core"
+import { server } from "../mocks/server"
 
-beforeAll(() => {
-    server.listen()
-})
+beforeAll(() => server.listen())
+
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
 it("it calls success and finish method in success", done => {
     http.post("api/users", {}, {
         onSuccess: (response) => {
-            expect(response.status).toBe(200)
-            assert.deepEqual(response.data, {
-                email: 'admin@admin.test'
-            })
+            expect(response.data.email).toEqual("admin@admin.test")
         },
-        onFinish: () => {
-            expect(true).toBe(true)
+        onError: (errors) => {
+            expect(false).toBe(true)
         },
+        onFinish: () => {},
+    })
+})
+
+it("it calls errors and finish method in success", done => {
+    http.post("api/errors", {}, {
+        onError: (errors) => {
+            expect(Object.keys(errors)).toStrictEqual(['email','name'])
+        },
+        onFinish: () => {},
     })
 })

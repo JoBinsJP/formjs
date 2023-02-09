@@ -31,7 +31,7 @@ export type GlobalEventsMap = {
     success: {
         parameters: [AxiosResponse]
         details: {
-            page: AxiosResponse
+            response: AxiosResponse
         }
         result: void
     }
