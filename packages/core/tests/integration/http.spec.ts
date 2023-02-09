@@ -1,6 +1,6 @@
 import {http} from "../../src"
 import {server} from "../mocks/server"
-import {beforeAll, expect, it} from 'vitest'
+import {beforeAll, expect, assert, it} from 'vitest'
 
 beforeAll(() => {
     server.listen()
@@ -9,12 +9,13 @@ beforeAll(() => {
 it("it calls success and finish method in success", done => {
     http.post("api/users", {}, {
         onSuccess: (response) => {
-            console.log(response)
-            // expect(response.status).toBe(200)
+            expect(response.status).toBe(200)
+            assert.deepEqual(response.data, {
+                email: 'admin@admin.test'
+            })
         },
         onFinish: () => {
             expect(true).toBe(true)
-            done()
         },
     })
 })
