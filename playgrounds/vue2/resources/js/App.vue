@@ -1,6 +1,5 @@
 <template>
     <div>
-        Hello
         <CreateUser/>
     </div>
 </template>
