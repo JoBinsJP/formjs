@@ -1,20 +1,20 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue2'
+import vue2 from "@vitejs/plugin-vue2"
+import { fileURLToPath, URL } from "node:url"
+
+import { defineConfig } from "vite"
+import { viteMockServe } from "vite-plugin-mock"
 
 export default defineConfig({
     plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-        vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
-                },
-            },
+        vue2(),
+        viteMockServe({
+            mockPath: "api",
+            localEnabled: true,
         }),
     ],
-});
+    resolve: {
+        alias: {
+            "@": fileURLToPath(new URL("./src", import.meta.url)),
+        },
+    },
+})
