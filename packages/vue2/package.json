@@ -1,19 +1,41 @@
 {
     "name": "formjs-vue2",
-    "version": "0.0.0",
+    "version": "0.0.2",
     "type": "module",
+    "contributors": [
+        "Bedram Tamang <tmgbedu@gmail.com>"
+    ],
+    "files": [
+        "dist",
+        "types"
+    ],
+    "main": "./dist/index.umd.cjs",
+    "module": "./dist/index.js",
+    "types": "types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./types/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.umd.cjs"
+        }
+    },
     "scripts": {
         "dev": "vite",
-        "build": "tsc --emitDeclarationOnly && vite build",
+        "test": "vitest",
+        "build": "npm run clean && tsc --emitDeclarationOnly && vite build",
         "clean": "rm -rf types && rm -rf dist",
         "prepublishOnly": "yarn run build"
     },
     "dependencies": {
-        "formjs-core": "^0.0.14",
+        "formjs-core": "^0.0.18",
         "lodash.clonedeep": "^4.5.0",
         "lodash.isequal": "^4.5.0"
     },
     "devDependencies": {
+        "@vitejs/plugin-vue2": "^2.2.0",
+        "@vue/test-utils": "^1.3.4",
+        "jsdom": "^21.1.0",
+        "msw": "^1.0.0",
         "typescript": "^4.9.3",
         "vite": "^3.0.0",
         "vitest": "^0.15.1",

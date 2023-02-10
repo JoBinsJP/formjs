@@ -1,7 +1,7 @@
 import { default as Axios } from "axios"
 import { hasFiles } from "./files"
 import { objectToFormData } from "./formData"
-import { RequestPayload, VisitOptions } from "./types"
+import { Errors, RequestPayload, VisitOptions } from "./types"
 import { hrefToUrl, urlWithoutHash } from "./url"
 
 export class Http {
@@ -35,12 +35,18 @@ export class Http {
                 "X-Requested-With": "XMLHttpRequest",
             },
         }).then((response) => {
-            const errors = response.data.errors || {}
-            if (Object.keys(errors).length > 0) {
-                return onError(errors)
-            }
-            return onSuccess(response.data)
+            return onSuccess(response)
         }).catch((error) => {
+            if (error.response?.status === 422) {
+                const errors: Errors = {}
+                const responseErrors = error.response.data?.errors || {}
+                if (Object.keys(responseErrors).length > 0) {
+                    Object.keys(responseErrors).forEach((name) => {
+                        errors[name] = responseErrors[name][0]
+                    })
+                    return onError(errors)
+                }
+            }
             return Promise.reject(error)
         }).then(() => {
             return onFinish()

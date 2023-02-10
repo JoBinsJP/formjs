@@ -151,7 +151,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
         created() {
             this.$watch(
                 () => form,
-                (newValue) => {
+                () => {
                     form.isDirty = !isEqual(form.data(), defaults)
                 },
                 {immediate: true, deep: true},

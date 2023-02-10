@@ -1,6 +1,6 @@
 {
     "name": "formjs-core",
-    "version": "0.0.14",
+    "version": "0.0.18",
     "type": "module",
     "contributors": [
         "Bedram Tamang <tmgbedu@gmail.com>"
@@ -20,6 +20,7 @@
         }
     },
     "scripts": {
+        "test": "vitest",
         "build": "npm run clean && tsc --emitDeclarationOnly && vite build",
         "clean": "rm -rf types && rm -rf dist",
         "prepublishOnly": "yarn run build"
@@ -28,7 +29,10 @@
         "axios": "^1.2.0"
     },
     "devDependencies": {
+        "jsdom": "^21.1.0",
+        "msw": "^1.0.0",
         "typescript": "^4.9.3",
-        "vite": "^4.1.0"
+        "vite": "^4.1.0",
+        "vitest": "^0.15.1"
     }
 }
