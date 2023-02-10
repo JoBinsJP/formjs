@@ -114,7 +114,6 @@ export default function useForm<TForm>(...args): Form<TForm> {
                 onError: (errors) => {
                     this.processing = false
                     this.clearErrors().setError(errors)
-                    console.log(this.errors)
 
                     if (options.onError) {
                         return options.onError(errors)
@@ -152,7 +151,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
         created() {
             this.$watch(
                 () => form,
-                (newValue) => {
+                () => {
                     form.isDirty = !isEqual(form.data(), defaults)
                 },
                 {immediate: true, deep: true},

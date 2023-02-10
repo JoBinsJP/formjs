@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils"
 import { MockedRequest } from "msw"
 import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
-import { useForm } from "~formjs-vue2"
+import Error from "../fixtures/Error.vue"
 import Form from "../fixtures/Form.vue"
 import { server, waitForRequest } from "../mocks/server"
 
@@ -22,17 +22,12 @@ it("it correctly updates data and send request", async () => {
     })
 })
 
-it("maps validation errors into forms", () => {
-    const form = useForm({
-        email: "",
-    })
+it("maps validation errors into forms", async () => {
+    const wrapper = mount(Error)
+    const button = wrapper.find('button')
 
-    form.post("api/errors", {
-        onError: (errors) => {
-            expect(Object.keys(errors)).toStrictEqual(["email", "name"])
-        },
-        onFinish: () => {},
-    })
+    await button.trigger('click')
 
-    expect(form.hasErrors).toBe(true)
+    const error = wrapper.find("span")
+    expect(error.text()).toContain("The email is a required item.")
 })
