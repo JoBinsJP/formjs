@@ -1,5 +1,7 @@
 <template>
-    <component :is="page"/>
+    <div class="container mx-auto py-8">
+        <component :is="page"/>
+    </div>
 </template>
 <script setup>
     import { computed, ref } from "vue"
@@ -11,3 +13,7 @@
         return routes[currentURL.value]
     })
 </script>
+
+<style>
+    @import "./app.css";
+</style>
