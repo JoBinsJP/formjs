@@ -1,17 +1,20 @@
 {
-    "private": true,
+    "name": "vue2",
+    "version": "0.0.0",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "preview": "vite preview --port 4173"
+    },
+    "dependencies": {
+        "vue": "^2.7.7"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue2": "^2.2.0",
-        "axios": "^1.1.2",
+        "@tailwindcss/forms": "^0.5.3",
+        "@vitejs/plugin-vue2": "^1.1.2",
         "formjs-vue2": "^0.0.2",
-        "laravel-vite-plugin": "^0.7.2",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14",
-        "vite": "^4.0.0",
-        "vue": "^2.7.14"
+        "terser": "^5.14.2",
+        "vite": "^3.0.2",
+        "vite-plugin-mock": "^2.9.6"
     }
 }
