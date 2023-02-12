@@ -17,7 +17,10 @@ export class Http {
             onError = () => {},
         }: VisitOptions = {},
     ): void {
-        let url = typeof href === "string" ? hrefToUrl(href) : href
+        const defaultBaseURL = Axios.defaults.baseURL
+        const authorizationToken = Axios.defaults.headers.common['Authorization']
+
+        let url = typeof href === "string" ? hrefToUrl(href, defaultBaseURL) : href
 
         if ((hasFiles(data) || forceFormData) && !(data instanceof FormData)) {
             data = objectToFormData(data)
@@ -25,14 +28,16 @@ export class Http {
 
         Axios({
             method,
+            baseURL: defaultBaseURL,
             url: urlWithoutHash(url).href,
             data: method === "get" ? {} : data,
             params: method === "get" ? data : {},
             headers: {
-                ...headers,
                 Accept: "application/json",
+                Authorization: authorizationToken,
                 "Content-Type": "application/json",
                 "X-Requested-With": "XMLHttpRequest",
+                ...headers,
             },
         }).then((response) => {
             return onSuccess(response)
