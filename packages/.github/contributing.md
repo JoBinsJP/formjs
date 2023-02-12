@@ -5,5 +5,15 @@ npm run build --workspace=packages --if-present
 
 ##### Publish 
 ```bash
-cd packages/vue2 & npm publish
+npm publish --workspace=packages --if-present
+```
+
+##### Set version
+```bash
+npm version {version} --workspace=packages --if-present
+```
+
+##### Test
+```bash
+npm run test --workspace=packages --if-present
 ```
