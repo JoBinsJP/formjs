@@ -1,6 +1,6 @@
 {
     "name": "formjs-vue2",
-    "version": "0.0.20",
+    "version": "0.0.21",
     "type": "module",
     "contributors": [
         "Bedram Tamang <tmgbedu@gmail.com>"
@@ -24,7 +24,7 @@
         "test": "vitest",
         "build": "npm run clean && tsc --emitDeclarationOnly && vite build",
         "clean": "rm -rf types && rm -rf dist",
-        "prepublishOnly": "yarn run build"
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "formjs-core": "^0.0.18",
