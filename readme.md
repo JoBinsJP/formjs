@@ -2,17 +2,18 @@
 Formjs is a wrapper around axios and Form helper, highly inspired from [InertiaJS](https://inertiajs.com/) for vue2. 
 It's a tool to use to handle form and API calls when building client-side application.
 
-### Installation
+## Installation
 ```bash
 yarn add formjs-vue2
 ```
 
-### Uses
-##### API call
+## Uses
+
+#### API call
 It can be used to make an API call.
 ```vue
 
-<script>
+<script setup>
     import { http } from "formjs-vue2"
 
     http.post("api/errors", {}, {
@@ -22,7 +23,9 @@ It can be used to make an API call.
     })
 </script>
 ```
-##### Form
+
+
+#### Form
 ```vue
 <template>
     <div>
@@ -46,13 +49,15 @@ It can be used to make an API call.
     })
 </script>
 ```
-##### Validation Errors
+
+
+## Validation Errors
 It requires to have errors in [Laravel standard](https://laravel.com/docs/9.x/validation#validation-error-response-format) json error format. In which each key has error messages in array 
 format. 
 
 ```json
 {
-    "message": "The team name must be a string. (and 4 more errors)",
+    "message": "The email field is required. (and 2 more errors)",
     "errors": {
         "email": [
             "The email field is required.",
@@ -65,7 +70,7 @@ format.
 }
 ```
 
-##### Frontend validations
+## Frontend validations
 It can be used with yup to validate form.
 
 ```vue
