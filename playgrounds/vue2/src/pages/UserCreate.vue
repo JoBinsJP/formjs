@@ -19,8 +19,8 @@
                 <input type="text"
                        v-model="form.name"
                        class="mt-2 input"
-                       @input="validate('name')"
-                       @blur="validate('name')"/>
+                       @input="form.validate('name')"
+                       @blur="form.validate('name')"/>
                 <span v-if="form.errors.name" class="text-red-500" v-text="form.errors.name"/>
             </div>
 
@@ -28,8 +28,8 @@
                 <label class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="text"
                        v-model="form.email"
-                       @input="validate('email')"
-                       @blur="validate('email')"
+                       @input="form.validate('email')"
+                       @blur="form.validate('email')"
                        class="mt-2 input"/>
                 <span v-if="form.errors.email" class="text-red-500" v-text="form.errors.email"/>
             </div>
@@ -40,6 +40,7 @@
                         class="button-danger">Cancel
                 </button>
                 <button type="submit"
+                        :disabled="form.processing"
                         @click="success"
                         class="ml-3 button-primary">Save
                 </button>
@@ -59,37 +60,17 @@
     const form = useForm({
         name: null,
         email: null,
-    })
+    }, userCreateSchema)
 
     const invalid = () => {
         form.post("/api/errors")
     }
 
-    const success = () => {
+    const success = async () => {
+        await form.validate()
+
+        if (form.hasErrors) { return}
+
         form.post("/api/users")
-    }
-
-    const validate = async (field) => {
-        try {
-            const user = await userCreateSchema.validate(form.data(), {
-                abortEarly: false,
-            })
-            form.clearErrors()
-        } catch (error) {
-            form.clearErrors(field)
-            error.inner.forEach((item)=>{
-                if(field === item.path){
-                    form.setError(field, item.errors[0])
-                }
-            })
-        }
-    }
-
-    const handleInput = async () => {
-        await validate()
-    }
-
-    const handleBlur = async () => {
-        await validate()
     }
 </script>

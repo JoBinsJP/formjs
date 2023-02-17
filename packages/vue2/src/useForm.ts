@@ -130,7 +130,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
                 if (!field) {
                     this.clearErrors()
                     error.inner.forEach((item) => {
-                        this.setError(field, item.errors[0])
+                        this.setError(item.path, item.errors[0])
                     })
                 } else {
                     this.clearErrors(field)
@@ -151,6 +151,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
 
         submit(method, url, options: VisitOptions = {}) {
             const data = transform(this.data())
+            this.processing = true
 
             const _options = {
                 ...options,
