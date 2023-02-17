@@ -1,7 +1,10 @@
 <template>
     <div>
-        <input type="email" v-model="form.email">
-        <span v-if="form.errors.email" v-text="form.errors.email"/>
+        <input type="email"
+               v-model="form.email"
+               @input="form.validate('email')">
+
+        <span v-text="form.errors"/>
 
         <button type="submit" @click="submit">Submit</button>
     </div>
@@ -10,10 +13,14 @@
 <script setup>
     import { useForm } from "~formjs-vue2"
     const form = useForm({
-        email: ""
+        email: "",
     })
 
     const submit = () => {
-        form.post('api/errors')
+        form.post("api/errors", {
+            onFinish: () => {
+                console.log("finish")
+            },
+        })
     }
 </script>

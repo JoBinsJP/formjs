@@ -7,7 +7,7 @@ yarn add formjs-vue2
 ```
 
 ### Uses
-1. API call
+##### API call
 It can be used to make an API call.
 ```vue
 
@@ -21,7 +21,7 @@ It can be used to make an API call.
     })
 </script>
 ```
-2. Form
+##### Form
 ```vue
 <template>
     <div>
@@ -45,5 +45,31 @@ It can be used to make an API call.
     })
 </script>
 ```
+##### Frontend validations
+It can be used with yup to validate form.
 
+```vue
+<template>
+    <div>
+        <input type="email" v-model="form.email" @blur="form.validate('email')">
+        <span v-if="form.errors.email" v-text="form.errors.email"/>
+
+        <button type="submit" :disabled="form.processing" @click="submit">Submit</button>
+    </div>
+</template>
+<script setup>
+    import { useForm } from "formjs-vue2"
+    import { object, string } from "yup"
+
+    const userStoreSchema = object({
+        email: string().email(),
+        firstname: string().min(8),
+    })
+
+    const form = useForm({
+        email: "",
+        firstname: "",
+    }, userStoreSchema)
+</script>
+```
 

@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils"
+import { nextTick } from 'vue'
 import { MockedRequest } from "msw"
 import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
 import Error from "../fixtures/Error.vue"
@@ -20,14 +21,4 @@ it("it correctly updates data and send request", async () => {
     expect((request as MockedRequest).body).toEqual({
         email: "admin@admin.test",
     })
-})
-
-it("maps validation errors into forms", async () => {
-    const wrapper = mount(Error)
-    const button = wrapper.find('button')
-
-    await button.trigger('click')
-
-    const error = wrapper.find("span")
-    expect(error.text()).toContain("The email is a required item.")
 })

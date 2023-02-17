@@ -17,13 +17,19 @@
             <div class="col-span-6 sm:col-span-3 mb-4">
                 <label class="block text-sm font-medium text-gray-700">Name</label>
                 <input type="text"
-                       class="mt-2 input"/>
+                       v-model="form.name"
+                       class="mt-2 input"
+                       @input="validate('name')"
+                       @blur="validate('name')"/>
                 <span v-if="form.errors.name" class="text-red-500" v-text="form.errors.name"/>
             </div>
 
             <div class="col-span-6 sm:col-span-3 mb-4">
                 <label class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="text"
+                       v-model="form.email"
+                       @input="validate('email')"
+                       @blur="validate('email')"
                        class="mt-2 input"/>
                 <span v-if="form.errors.email" class="text-red-500" v-text="form.errors.email"/>
             </div>
@@ -43,6 +49,12 @@
 </template>
 <script setup>
     import { useForm } from "formjs-vue2"
+    import { object, string } from "yup"
+
+    const userCreateSchema = object({
+        name: string().required().min(10),
+        email: string().required().email().min(10),
+    })
 
     const form = useForm({
         name: null,
@@ -55,5 +67,29 @@
 
     const success = () => {
         form.post("/api/users")
+    }
+
+    const validate = async (field) => {
+        try {
+            const user = await userCreateSchema.validate(form.data(), {
+                abortEarly: false,
+            })
+            form.clearErrors()
+        } catch (error) {
+            form.clearErrors(field)
+            error.inner.forEach((item)=>{
+                if(field === item.path){
+                    form.setError(field, item.errors[0])
+                }
+            })
+        }
+    }
+
+    const handleInput = async () => {
+        await validate()
+    }
+
+    const handleBlur = async () => {
+        await validate()
     }
 </script>

@@ -6,3 +6,4 @@ node_modules
 .pnp.*
 .yarn
 yarn.lock
+package-lock.json
