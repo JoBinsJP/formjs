@@ -1,5 +1,6 @@
 # formjs
-Formjs is a wrapper around axios and Form helper, highly inspired from [InertiaJS](https://inertiajs.com/). It's a tool to use to handle form and API calls when building client-side application.
+Formjs is a wrapper around axios and Form helper, highly inspired from [InertiaJS](https://inertiajs.com/) for vue2. 
+It's a tool to use to handle form and API calls when building client-side application.
 
 ### Installation
 ```bash
@@ -45,6 +46,25 @@ It can be used to make an API call.
     })
 </script>
 ```
+##### Validation Errors
+It requires to have errors in [Laravel standard](https://laravel.com/docs/9.x/validation#validation-error-response-format) json error format. In which each key has error messages in array 
+format. 
+
+```json
+{
+    "message": "The team name must be a string. (and 4 more errors)",
+    "errors": {
+        "email": [
+            "The email field is required.",
+            "The email must be a valid email address."
+        ],
+        "name": [
+            "The name field is required."
+        ],
+    }
+}
+```
+
 ##### Frontend validations
 It can be used with yup to validate form.
 
@@ -71,5 +91,11 @@ It can be used with yup to validate form.
         firstname: "",
     }, userStoreSchema)
 </script>
+
+// Somewhere in template
+<input v-model="form.email" @input="form.validate('email')"/>
 ```
 
+### License
+
+The FormJs package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
