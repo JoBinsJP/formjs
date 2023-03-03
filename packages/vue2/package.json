@@ -1,6 +1,6 @@
 {
     "name": "formjs-vue2",
-    "version": "0.0.24",
+    "version": "0.0.30",
     "type": "module",
     "contributors": [
         "Bedram Tamang <tmgbedu@gmail.com>"
@@ -20,14 +20,13 @@
         }
     },
     "scripts": {
-        "dev": "vite",
-        "test": "vitest",
+        "test": "vitest run -r tests",
         "build": "npm run clean && tsc --emitDeclarationOnly && vite build",
         "clean": "rm -rf types && rm -rf dist",
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
-        "formjs-core": "^0.0.18",
+        "formjs-core": "^0.0.32",
         "lodash.clonedeep": "^4.5.0",
         "lodash.isequal": "^4.5.0",
         "yup": "^1.0.0"

@@ -26,4 +26,19 @@ export const handlers = [
             }),
         )
     }),
+
+    rest.post("https://custom-config.com/api/users", (_req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json([
+                { name: "admin", email: "admin@admin.test" },
+            ]),
+        )
+    }),
+
+    rest.post("api/404-not-found", (_req, res, ctx) => {
+        return res(
+            ctx.status(400)
+        )
+    }),
 ]

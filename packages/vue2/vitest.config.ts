@@ -7,6 +7,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '~formjs-vue2':  resolve(__dirname, './src'),
+            'formjs-core':  resolve(__dirname, '../core/src'),
         },
     },
     test: {

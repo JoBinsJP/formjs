@@ -1,4 +1,4 @@
-import { http, Method, VisitOptions } from "formjs-core"
+import { http, Instance, Method, VisitOptions } from "formjs-core"
 import cloneDeep from "lodash.clonedeep"
 import isEqual from "lodash.isequal"
 import Vue from "vue"
@@ -45,11 +45,15 @@ interface FormProps<TForm> {
 }
 
 type Form<TForm> = TForm & FormProps<TForm>
-
-export default function useForm<TForm>(data: TForm, schema: ObjectSchema<Record<keyof TForm, string>>): Form<TForm>
-export default function useForm<TForm>(...args): Form<TForm> {
-    const data = args[0] || {}
-    const validationSchema = args[1]
+type FormOptions<TForm> = {
+    schema?: ObjectSchema<Record<keyof TForm, string>>,
+    instance?: Instance
+}
+export default function useForm<TForm>(_data: TForm, _options: FormOptions<TForm>): Form<TForm>
+export default function useForm<TForm>(_data, formOptions: FormOptions<TForm> = {}): Form<TForm> {
+    const data = _data || {}
+    const validationSchema = formOptions.schema
+    const instance = formOptions.instance
     let defaults = cloneDeep(data)
     let transform = (data) => data
 
@@ -154,6 +158,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
             this.processing = true
 
             const _options = {
+                instance,
                 ...options,
                 onSuccess: async (data) => {
                     this.clearErrors()
@@ -164,12 +169,19 @@ export default function useForm<TForm>(...args): Form<TForm> {
                     this.isDirty = false
                     return onSuccess
                 },
-                onError: (errors) => {
+                onErrors: (errors) => {
                     this.processing = false
                     this.clearErrors().setError(errors)
 
+                    if (options.onErrors) {
+                        return options.onErrors(errors)
+                    }
+                },
+                onError: (error) => {
+                    this.processing = false
+
                     if (options.onError) {
-                        return options.onError(errors)
+                        return options.onError(error)
                     }
                 },
                 onFinish: () => {
