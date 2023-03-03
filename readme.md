@@ -27,6 +27,7 @@ It can be used to make an API call.
 
 #### Form
 ```vue
+
 <template>
     <div>
         <input type="email" v-model="form.email">
@@ -39,13 +40,22 @@ It can be used to make an API call.
     import { useForm } from "formjs-vue2"
 
     const form = useForm({
-        email: ""
+        email: "",
     })
-    
+
     form.post("api/users", {}, {
-        onSuccess:(response)=>{},
-        onError: (errors) => {},
-        onFinish: () => {},
+        onSuccess: (response) => {
+            // success 
+        },
+        onErrors: (errors) => {
+            // 422 status server validation errors
+        },
+        onError: (error) => {
+            // Other than 422 status errors
+        },
+        onFinish: () => {
+            // The request is completed.
+        },
     })
 </script>
 ```
@@ -94,13 +104,35 @@ It can be used with yup to validate form.
     const form = useForm({
         email: "",
         firstname: "",
-    }, userStoreSchema)
+    }, {schema: userStoreSchema})
 </script>
 
 // Somewhere in template
 <input v-model="form.email" @input="form.validate('email')"/>
 ```
 
-### License
+## Custom Axios instance
+Sometimes it is required to configure custom request.
+```js
+const instance = Axios.create({ 
+    baseURL: "https://custom-config.com", 
+    headers: { 
+        Authorization: `Bearer token`, 
+    },
+})
+
+const form = useForm({
+    email: null,
+    name: null,
+}, { instance: instance })
+
+// In http
+const data = {}
+http.post("api/users", data , {
+    instance: instance,
+})
+```
+
+## License
 
 The FormJs package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
