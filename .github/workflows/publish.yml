@@ -28,10 +28,13 @@ jobs:
             # Bump package version
             # Use tag latest
             -   name: Bump release version
-                if: startsWith(github.event.inputs.release-type, 'pre') != true
+                if: startsWith(github.event.inputs.releaseType, 'pre') != true
                 run: |
+                    version = $(npm --no-git-tag-version version) ${{ env.RELEASE_TYPE }}
+                    echo version
                     echo "NEW_VERSION=$(npm --no-git-tag-version version env.RELEASE_TYPE)"
                     echo "NEW_VERSION=$(npm --no-git-tag-version version env.RELEASE_TYPE)" >> $GITHUB_ENV
+                    echo ${{ env.NEW_VERSION }}
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
