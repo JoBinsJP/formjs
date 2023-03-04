@@ -31,8 +31,7 @@ jobs:
                 if: startsWith(github.event.inputs.releaseType, 'pre') != true
                 run: |
                     echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }} )" >> $GITHUB_ENV
-                    echo ${{ env.NEW_VERSION }}
-                shell: bash
+                    echo $GITHUB_ENV
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
