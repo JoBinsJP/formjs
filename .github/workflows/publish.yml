@@ -31,6 +31,7 @@ jobs:
                 if: startsWith(github.event.inputs.releaseType, 'pre') != true
                 run: |
                     echo $(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})
+                    echo "FOO=$(git status)" >> $GITHUB_ENV
                     echo "NEW_VERSION=v0.1.1" >> $GITHUB_ENV
                     echo ${{ env.NEW_VERSION }}
                 env:
@@ -52,6 +53,7 @@ jobs:
                     path-to-changelog: CHANGELOG.md
                     version: ${{ env.NEW_VERSION }}
                     operation: release
+                    foo: ${{ env.FOO }}
             
             # Commit changes
             -   name: Commit CHANGELOG.md and package.json changes and create tag
