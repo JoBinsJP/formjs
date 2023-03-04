@@ -30,7 +30,7 @@ jobs:
             -   name: Bump release version
                 if: startsWith(github.event.inputs.releaseType, 'pre') != true
                 run: |
-                    echo $(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})
+                    echo "$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})"
                     echo "FOO=$(git status)" >> $GITHUB_ENV
                     echo "NEW_VERSION=v0.1.1" >> $GITHUB_ENV
                     echo ${{ env.NEW_VERSION }}
