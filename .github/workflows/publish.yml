@@ -33,7 +33,7 @@ jobs:
                     echo "NEW_VERSION=$(npm --no-git-tag-version version $RELEASE_TYPE)" >> $GITHUB_ENV
                     echo "RELEASE_TAG=latest" >> $GITHUB_ENV
                 env:
-                    RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+                    RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
             # Bump package pre-release version
             # Use tag beta for pre-release versions
