@@ -30,8 +30,7 @@ jobs:
             -   name: Bump release version
                 if: startsWith(github.event.inputs.releaseType, 'pre') != true
                 run: |
-                    echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }} )" >> $GITHUB_ENV
-                    echo "$GITHUB_ENV"
+                    echo "Releaseing ${{ env.RELEASE_TYPE }}"
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
@@ -49,7 +48,7 @@ jobs:
                 uses: superfaceai/release-changelog-action@v1
                 with:
                     path-to-changelog: CHANGELOG.md
-                    version: ${{ env.NEW_VERSION }}
+                    version: $(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})
                     operation: release
             
             # Commit changes
