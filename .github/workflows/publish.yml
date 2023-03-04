@@ -48,7 +48,7 @@ jobs:
                 uses: superfaceai/release-changelog-action@v1
                 with:
                     path-to-changelog: CHANGELOG.md
-                    version: $(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})
+                    version: ${{ npm --no-git-tag-version version ${{ env.RELEASE_TYPE }} }}
                     operation: release
             
             # Commit changes
