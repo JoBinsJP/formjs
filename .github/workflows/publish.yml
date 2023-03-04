@@ -34,7 +34,7 @@ jobs:
                     echo ${{ env }}
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
-                    VERSION: ${{ npm --no-git-tag-version version $RELEASE_TYPE }}
+                    VERSION: $(npm --no-git-tag-version version ${{ RELEASE_TYPE}})
             
             # Bump package pre-release version
             # Use tag beta for pre-release versions
