@@ -1,0 +1,12 @@
+name: "Release package"
+on:
+    workflow_dispatch:
+        inputs:
+            releaseType:
+                description: 'Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease'
+                options:
+                    - patch
+                    - minor
+                    - major
+                required: true
+                
