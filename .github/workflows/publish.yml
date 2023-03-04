@@ -30,7 +30,7 @@ jobs:
             -   name: Bump release version
                 if: startsWith(github.event.inputs.releaseType, 'pre') != true
                 run: |
-                    echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }}" >> $GITHUB_ENV
+                    echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
                     echo ${{ env.NEW_VERSION }}
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
@@ -40,8 +40,7 @@ jobs:
             -   name: Bump pre-release version
                 if: startsWith(github.event.inputs.releaseType, 'pre')
                 run: |
-                    echo ${{ env.RELEASE_TYPE }}
-                    echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version env.RELEASE_TYPE)" >> $GITHUB_ENV
+                    echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
