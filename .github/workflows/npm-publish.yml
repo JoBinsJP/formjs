@@ -1,12 +1,24 @@
 name: "Release package"
-on:
-    workflow_dispatch:
-        inputs:
-            releaseType:
-                description: 'Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease'
-                options:
-                    - patch
-                    - minor
-                    - major
-                required: true
+on: [push]
+
+
+env:
+  release: minor
                 
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                adapter: [ 'core' ]
+                node-version: [ 14.x ]
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Setup Node
+                uses: actions/setup-node@v2
+                with:
+                    node-version: '14.x'
+                    registry-url: 'https://registry.npmjs.org'
+            -   name: Run my action
+                run: echo ${{ env.release }}
