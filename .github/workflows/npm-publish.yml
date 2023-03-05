@@ -21,5 +21,9 @@ jobs:
                     node-version: '14.x'
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
-                run: echo "$(npm --no-git-tag-version version major)"
+                run: |
+                    GREETINGS="Hello! How are you"
+                    echo $GREETINGS
+                    echo "$(npm --no-git-tag-version version major)"
                 shell: bash
+
