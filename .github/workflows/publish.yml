@@ -72,7 +72,7 @@ jobs:
                 run: |
                     cd packages/${{ matrix.adapter }}
                     npm install
-                    npm version ${{ env.NEW_VERSION }}
+                    npm version ${{ env.RELEASE_TYPE }}
                     npm publish
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
