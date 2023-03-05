@@ -22,7 +22,7 @@ jobs:
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
                 run: |
-                    GREETINGS="Hello! How are you"
+                    GREETINGS=$(npm --no-git-tag-version version major)
                     echo $GREETINGS
                     echo $(npm --no-git-tag-version version major)
                 shell: bash
