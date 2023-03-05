@@ -10,7 +10,7 @@ npm publish --workspace=packages --if-present
 
 ##### Set version
 ```bash
-npm version {version} --workspace=packages --if-present
+npm version minor --workspace=packages --if-present
 ```
 
 ##### Test

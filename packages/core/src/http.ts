@@ -14,27 +14,27 @@ export class Http {
             forceFormData = false,
             onFinish = () => {},
             onSuccess = () => {},
+            onErrors = () => {},
             onError = () => {},
+            instance = Axios,
         }: VisitOptions = {},
     ): void {
-        const defaultBaseURL = Axios.defaults.baseURL
-        const authorizationToken = Axios.defaults.headers.common['Authorization']
-
-        let url = typeof href === "string" ? hrefToUrl(href, defaultBaseURL) : href
-
         if ((hasFiles(data) || forceFormData) && !(data instanceof FormData)) {
             data = objectToFormData(data)
         }
 
-        Axios({
+        const defaultConfig = instance?.defaults
+        let url = typeof href === "string" ? hrefToUrl(href, defaultConfig?.baseURL) : href
+
+        const _url = urlWithoutHash(url).href
+
+        instance(_url, {
+            ...defaultConfig,
             method,
-            baseURL: defaultBaseURL,
-            url: urlWithoutHash(url).href,
             data: method === "get" ? {} : data,
             params: method === "get" ? data : {},
             headers: {
                 Accept: "application/json",
-                Authorization: authorizationToken,
                 "Content-Type": "application/json",
                 "X-Requested-With": "XMLHttpRequest",
                 ...headers,
@@ -49,10 +49,10 @@ export class Http {
                     Object.keys(responseErrors).forEach((name) => {
                         errors[name] = responseErrors[name][0]
                     })
-                    return onError(errors)
+                    return onErrors(errors)
                 }
             }
-            return Promise.reject(error)
+            return onError(error)
         }).then(() => {
             return onFinish()
         }).catch((error) => {

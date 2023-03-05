@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios"
+import { AxiosError, AxiosInstance, AxiosResponse } from "axios"
 export type Method = "get" | "post" | "put" | "patch" | "delete"
 
 declare module "axios" {
@@ -24,7 +24,8 @@ export type Visit = {
     method: Method
     data: RequestPayload
     headers: Record<string, string>
-    forceFormData: boolean
+    forceFormData: boolean,
+    instance?: AxiosInstance
 }
 
 export type GlobalEventsMap = {
@@ -35,18 +36,23 @@ export type GlobalEventsMap = {
         }
         result: void
     }
-    error: {
+    errors: {
         parameters: [Errors]
         details: {
             errors: Errors
         }
         result: void
     }
+    error: {
+        parameters: [AxiosError]
+        details: {
+            visit: AxiosError
+        }
+        result: void
+    },
     finish: {
         parameters: []
-        details: {
-            visit: AxiosResponse
-        }
+        details: {}
         result: void
     }
 }
@@ -62,5 +68,8 @@ export type GlobalEventCallback<TEventName extends GlobalEventNames> = (
 export type VisitOptions = Partial<Visit & {
     onFinish: GlobalEventCallback<"finish">
     onSuccess: GlobalEventCallback<"success">
+    onErrors: GlobalEventCallback<"errors">
     onError: GlobalEventCallback<"error">
 }>
+
+export type Instance = AxiosInstance

@@ -34,4 +34,11 @@ export const handlers = [
             ctx.json({}),
         )
     }),
+
+    rest.post("https://custom-config.com/api/users", (_req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({}),
+        )
+    }),
 ]

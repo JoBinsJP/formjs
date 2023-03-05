@@ -1,6 +1,6 @@
 {
     "name": "formjs-core",
-    "version": "0.0.23",
+    "version": "0.0.30",
     "type": "module",
     "contributors": [
         "Bedram Tamang <tmgbedu@gmail.com>"
@@ -20,7 +20,7 @@
         }
     },
     "scripts": {
-        "test": "vitest",
+        "test": "vitest run -r tests",
         "build": "npm run clean && tsc --emitDeclarationOnly && vite build",
         "clean": "rm -rf types && rm -rf dist",
         "prepublishOnly": "npm run build"

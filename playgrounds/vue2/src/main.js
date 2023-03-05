@@ -1,19 +1,20 @@
 import axios from "axios"
+import { createPinia, PiniaVuePlugin } from "pinia"
 import Vue from "vue"
 import App from "./App.vue"
 
-axios.defaults.baseURL = "https://api.example.com"
-axios.interceptors.request.use(
-    function(success) {
-        console.log("hello")
-        return success
+axios.interceptors.response.use(res => {
+        return res
     },
-    function(error) {
-        console.log(error)
-        return Promise.reject(error)
+    res => {
+        throw res
     },
 )
 
+Vue.use(PiniaVuePlugin)
+const pinia = createPinia()
+
 new Vue({
     render: (h) => h(App),
+    pinia,
 }).$mount("#app")

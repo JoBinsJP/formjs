@@ -1,0 +1,22 @@
+name: "Run Tests - Current"
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                adapter: [ 'core','vue2' ]
+                node-version: [ 14.x ]
+        steps:
+            -   uses: actions/checkout@v3
+            -   name: Testing ${{ matrix.adapter }}
+                uses: actions/setup-node@v3
+                with:
+                    node-version: ${{ matrix.node-version }}
+            -   run: cd packages/${{ matrix.adapter }} && npm install && npm run build && npm run test

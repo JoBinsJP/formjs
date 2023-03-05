@@ -19,22 +19,29 @@
                 <input type="text"
                        v-model="form.name"
                        class="mt-2 input"
-                       @input="form.validate('name')"
                        @blur="form.validate('name')"/>
-                <span v-if="form.errors.name" class="text-red-500" v-text="form.errors.name"/>
+                <span v-if="form.errors.name"
+                      class="text-red-500"
+                      v-text="form.errors.name"/>
             </div>
 
             <div class="col-span-6 sm:col-span-3 mb-4">
                 <label class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="text"
                        v-model="form.email"
-                       @input="form.validate('email')"
                        @blur="form.validate('email')"
                        class="mt-2 input"/>
-                <span v-if="form.errors.email" class="text-red-500" v-text="form.errors.email"/>
+                <span v-if="form.errors.email"
+                      class="text-red-500"
+                      v-text="form.errors.email"/>
             </div>
 
             <div class="flex justify-end">
+                <button type="button"
+                        @click="form.reset()"
+                        class="button-info">
+                    Reset
+                </button>
                 <button type="submit"
                         @click="invalid"
                         class="button-danger">Cancel
@@ -49,28 +56,7 @@
     </div>
 </template>
 <script setup>
-    import { useForm } from "formjs-vue2"
-    import { object, string } from "yup"
+    import useUser from "../composable/useUser.js"
 
-    const userCreateSchema = object({
-        name: string().required().min(10),
-        email: string().required().email().min(10),
-    })
-
-    const form = useForm({
-        name: null,
-        email: null,
-    }, userCreateSchema)
-
-    const invalid = () => {
-        form.post("/api/errors")
-    }
-
-    const success = async () => {
-        await form.validate()
-
-        if (form.hasErrors) { return}
-
-        form.post("/api/users")
-    }
+    const { form, invalid, success } = useUser()
 </script>
