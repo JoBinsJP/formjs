@@ -22,7 +22,7 @@ jobs:
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
                 run: |
-                   echo "::$(npm --no-git-tag-version version minor)"
+                   echo "::$(ls)"
                 shell: bash
                 
             -   name: Next Step
