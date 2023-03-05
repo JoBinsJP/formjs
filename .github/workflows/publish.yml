@@ -69,7 +69,7 @@ jobs:
                     
             -   name: Releasing ${{ env.NEW_VERSION }}
                 run: |
-                    npm version ${{ env.NEW_VERSION }}
+                    npm version ${{ env.RELEASE_TYPE }}
             
             # Update changelog unreleased section with new version
             -   name: Update changelog
