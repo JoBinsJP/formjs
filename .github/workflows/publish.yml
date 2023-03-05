@@ -24,26 +24,28 @@ jobs:
                 with:
                     node-version: '14.x'
                     registry-url: 'https://registry.npmjs.org'
-            
+                    
             # Bump package version
             # Use tag latest
             -   name: Bump release version
-                if: startsWith(github.event.inputs.releaseType, 'pre') != true
+                if: startsWith(github.event.inputs.release-type, 'pre') != true
                 run: |
-                    echo "FOO=$(npm version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
-                    echo "NEW_VERSION=v0.1.1" >> $GITHUB_ENV
-                    echo ${{ env.NEW_VERSION }}
+                    cd packages/${{ matrix.adapter }}
+                    echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
+                    echo "RELEASE_TAG=latest" >> $GITHUB_ENV
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
-#             # Bump package pre-release version
-#             # Use tag beta for pre-release versions
-#             -   name: Bump pre-release version
-#                 if: startsWith(github.event.inputs.releaseType, 'pre')
-#                 run: |
-#                     echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
-#                 env:
-#                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
+            
+             # Bump package pre-release version
+             # Use tag beta for pre-release versions
+            -   name: Bump pre-release version
+                if: startsWith(github.event.inputs.releaseType, 'pre')
+                run: |
+                   cd packages/${{ matrix.adapter }}
+                   echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
+                env:
+                   RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
             # Update changelog unreleased section with new version
             -   name: Update changelog
