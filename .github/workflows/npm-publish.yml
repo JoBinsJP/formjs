@@ -22,3 +22,4 @@ jobs:
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
                 run: echo ${{ env.release }}
+                shell: bash
