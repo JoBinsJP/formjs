@@ -36,7 +36,6 @@ jobs:
             -   name: Publish 🔧
                 run: |
                     cd packages/${{ matrix.adapter }}
-                    npm install
                     npm version ${{ env.RELEASE_TYPE }}
                     npm publish
                 env:
@@ -53,8 +52,8 @@ jobs:
                 run: |
                     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
                     git config --global user.name "GitHub Actions"
-                        # Bump package version
-                    
+                        
+            # Bump package version        
             # Use tag latest
             -   name: Bump release version
                 run: |
