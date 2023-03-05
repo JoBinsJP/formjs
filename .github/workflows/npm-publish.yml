@@ -24,6 +24,6 @@ jobs:
                 run: |
                     GREETINGS="Hello! How are you"
                     echo $GREETINGS
-                    echo "$(npm --no-git-tag-version version major)"
+                    echo $(npm --no-git-tag-version version major)
                 shell: bash
 
