@@ -22,7 +22,7 @@ jobs:
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
                 run: |
-                   echo "::set-output name=builddate::$(date +"%Y-%m-%d")"
+                   echo "::$(npm --no-git-tag-version version minor)"
                 shell: bash
                 
             -   name: Next Step
