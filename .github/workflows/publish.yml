@@ -10,7 +10,7 @@ on:
                     - major
                 required: true
 jobs:
-    build:
+    publish:
         runs-on: ubuntu-latest
         strategy:
             matrix:
@@ -24,34 +24,43 @@ jobs:
                 with:
                     node-version: '14.x'
                     registry-url: 'https://registry.npmjs.org'
-                    
+            
+            # Bump package version
+            # Use tag latest
+            -   name: Bump release version
+                run: |
+                    echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
+                env:
+                    RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
+            
+            -   name: Publish 🔧
+                run: |
+                    cd packages/${{ matrix.adapter }}
+                    npm install
+                    npm version ${{ env.RELEASE_TYPE }}
+                    npm publish
+                env:
+                    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    release:
+        runs-on: ubuntu-latest
+        needs: publish
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+                
             # Configure Git
             -   name: Git configuration
                 run: |
                     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
                     git config --global user.name "GitHub Actions"
+                        # Bump package version
                     
-            # Bump package version
             # Use tag latest
             -   name: Bump release version
-                if: startsWith(github.event.inputs.release-type, 'pre') != true
                 run: |
-                    cd packages/${{ matrix.adapter }}
                     echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
-                    echo "RELEASE_TAG=latest" >> $GITHUB_ENV
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
-            
-            
-             # Bump package pre-release version
-             # Use tag beta for pre-release versions
-            -   name: Bump pre-release version
-                if: startsWith(github.event.inputs.releaseType, 'pre')
-                run: |
-                   cd packages/${{ matrix.adapter }}
-                   echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
-                env:
-                   RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
             # Update changelog unreleased section with new version
             -   name: Update changelog
@@ -60,22 +69,13 @@ jobs:
                     path-to-changelog: CHANGELOG.md
                     version: ${{ env.NEW_VERSION }}
                     operation: release
-            
+                    
             # Commit changes
-            -   name: Commit CHANGELOG.md and package.json changes and create tag
+            -   name: Commit ChangeLog & package.json changes and create tag
                 run: |
                     git add .
                     git commit -m "chore: release ${{ env.NEW_VERSION }}"
                     git tag ${{ env.NEW_VERSION }}
-            
-            -   name: Install dependencies and build 🔧
-                run: |
-                    cd packages/${{ matrix.adapter }}
-                    npm install
-                    npm version ${{ env.RELEASE_TYPE }}
-                    npm publish
-                env:
-                    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             
             # Push repository changes
             -   name: Push changes to repository
@@ -93,3 +93,4 @@ jobs:
                     prerelease: ${{ startsWith(github.event.inputs.releaseType, 'pre') }}
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
