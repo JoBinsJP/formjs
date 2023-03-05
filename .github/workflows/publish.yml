@@ -33,11 +33,12 @@ jobs:
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
             
-            -   name: Publish 🔧
+            -   name: Publishing ${{ matrix.adapter }}@${{ env.NEW_VERSION }}
                 run: |
                     cd packages/${{ matrix.adapter }}
-                    npm version ${{ env.RELEASE_TYPE }}
-                    npm install && npm publish
+                    npm install
+                    npm version ${{ env.NEW_VERSION }}
+                    npm publish
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     release:
@@ -46,20 +47,30 @@ jobs:
         steps:
             -   name: Checkout
                 uses: actions/checkout@v2
+            -   name: Setup Node
+                uses: actions/setup-node@v2
+                with:
+                    node-version: '14.x'
+                    registry-url: 'https://registry.npmjs.org'
                 
             # Configure Git
             -   name: Git configuration
                 run: |
                     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
                     git config --global user.name "GitHub Actions"
-                        
-            # Bump package version        
+                        # Bump package version
+                    
             # Use tag latest
             -   name: Bump release version
                 run: |
                     echo "NEW_VERSION=$(npm --no-git-tag-version version ${{ env.RELEASE_TYPE }})" >> $GITHUB_ENV
                 env:
                     RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
+                    
+            -   name: Releasing ${{ env.NEW_VERSION }}
+                run: |
+                    npm install
+                    npm version ${{ env.NEW_VERSION }}
             
             # Update changelog unreleased section with new version
             -   name: Update changelog
