@@ -60,7 +60,6 @@ jobs:
                     path-to-changelog: CHANGELOG.md
                     version: ${{ env.NEW_VERSION }}
                     operation: release
-                    foo: ${{ env.FOO }}
             
             # Commit changes
             -   name: Commit CHANGELOG.md and package.json changes and create tag
@@ -72,9 +71,9 @@ jobs:
             -   name: Install dependencies and build 🔧
                 run: |
                     cd packages/${{ matrix.adapter }}
-                    && npm install
-                    && npm version ${{ env.NEW_VERSION }}
-                    && npm publish
+                    npm install
+                    npm version ${{ env.NEW_VERSION }}
+                    npm publish
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             
