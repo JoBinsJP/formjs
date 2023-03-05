@@ -22,8 +22,9 @@ jobs:
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
                 run: |
-                    GREETINGS=$(npm --no-git-tag-version version major)
-                    echo $GREETINGS
-                    echo $(npm --no-git-tag-version version major)
+                    echo "NEW_VERSION=::$(npm --no-git-tag-version version major)" >> $GITHUB_ENV 
                 shell: bash
+                
+            -   name: Next Step
+                run: echo ${{ env.NEW_VERSION }} 
 
