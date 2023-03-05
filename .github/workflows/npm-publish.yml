@@ -22,7 +22,7 @@ jobs:
                     registry-url: 'https://registry.npmjs.org'
             -   name: Run my action
                 run: |
-                   echo "::$(ls)"
+                   cd packages/core && echo "::$(npm --no-git-tag-version version ${{ env.release }})"
                 shell: bash
                 
             -   name: Next Step
