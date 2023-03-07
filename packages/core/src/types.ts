@@ -72,4 +72,11 @@ export type VisitOptions = Partial<Visit & {
     onError: GlobalEventCallback<"error">
 }>
 
+export type ResponseOption = Partial<{
+    onFinish: GlobalEventCallback<"finish">
+    onSuccess: GlobalEventCallback<"success">
+    onErrors: GlobalEventCallback<"errors">
+    onError: GlobalEventCallback<"error">
+}>
+
 export type Instance = AxiosInstance

@@ -1,4 +1,4 @@
-import { http, Instance, Method, VisitOptions } from "formjs-core"
+import { http, Instance, Method, VisitOptions, ResponseOptions } from "formjs-core"
 import cloneDeep from "lodash.clonedeep"
 import isEqual from "lodash.isequal"
 import Vue from "vue"
@@ -42,6 +42,8 @@ interface FormProps<TForm> {
     put(url: string, options?: Partial<VisitOptions>): void
 
     delete(url: string, options?: Partial<VisitOptions>): void
+
+    call(callback: Promise<AxiosResponse<any, any>>, options?: Partial<ResponseOptions>): void
 }
 
 type Form<TForm> = TForm & FormProps<TForm>
@@ -49,11 +51,10 @@ type FormOptions<TForm> = {
     schema?: ObjectSchema<Record<keyof TForm, string>>,
     instance?: Instance
 }
-export default function useForm<TForm>(_data: TForm, _options: FormOptions<TForm>): Form<TForm>
-export default function useForm<TForm>(_data, formOptions: FormOptions<TForm> = {}): Form<TForm> {
+export default function useForm<TForm>(_data: TForm, _options: FormOptions<TForm>={}): Form<TForm>{
     const data = _data || {}
-    const validationSchema = formOptions.schema
-    const instance = formOptions.instance
+    const validationSchema = _options.schema
+    const instance = _options.instance
     let defaults = cloneDeep(data)
     let transform = (data) => data
 
@@ -209,6 +210,9 @@ export default function useForm<TForm>(_data, formOptions: FormOptions<TForm> = 
         },
         delete(url, options) {
             this.submit("delete", url, options)
+        },
+        call(callback, options) {
+            this.submit("call", callback, options)
         },
     })
 
