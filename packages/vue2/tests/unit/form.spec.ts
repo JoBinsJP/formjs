@@ -1,8 +1,9 @@
 import { default as Axios } from "axios"
 import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
 import { object, string } from "yup"
-import { useForm } from "~formjs-vue2"
+import { useForm } from "../../src"
 import { server } from "../mocks/server"
+import { UserService } from "../mocks/userService"
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
@@ -125,7 +126,7 @@ it("validates form with schema", async () => {
     expect(form.errors.email).toBe("email must be a valid email")
 })
 
-it("form sends data with validation schema", async () => {
+it("form sends data with validation schema",()=> new Promise<void>(done => {
     const userSchema = object({
         email: string().email(),
     })
@@ -139,4 +140,16 @@ it("form sends data with validation schema", async () => {
             done()
         },
     })
-})
+}))
+
+it("can call custom service as ", () => new Promise<void>(done => {
+    const form = useForm({
+        email: "admi",
+    })
+
+    form.call(UserService.getUsers,{
+        onSuccess: (response) => {
+            done()
+        },
+    })
+}))
