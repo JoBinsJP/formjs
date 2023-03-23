@@ -26,10 +26,11 @@
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
-        "formjs-core": "^0.0.32",
+        "formjs-core": "^0.0.34",
         "lodash.clonedeep": "^4.5.0",
         "lodash.isequal": "^4.5.0",
-        "yup": "^1.0.0"
+        "yup": "^1.0.0",
+        "axios": "^1.2.0"
     },
     "devDependencies": {
         "@vitejs/plugin-vue2": "^2.2.0",
