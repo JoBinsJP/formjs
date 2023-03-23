@@ -1,7 +1,7 @@
-import { default as Axios } from "axios"
+import { AxiosResponse, default as Axios } from "axios"
 import { hasFiles } from "./files"
 import { objectToFormData } from "./formData"
-import { Errors, RequestPayload, VisitOptions } from "./types"
+import { Errors, RequestPayload, ResponseOption, VisitOptions } from "./types"
 import { hrefToUrl, urlWithoutHash } from "./url"
 
 export class Http {
@@ -28,7 +28,7 @@ export class Http {
 
         const _url = urlWithoutHash(url).href
 
-        instance(_url, {
+        const response = instance(_url, {
             ...defaultConfig,
             method,
             data: method === "get" ? {} : data,
@@ -39,24 +39,13 @@ export class Http {
                 "X-Requested-With": "XMLHttpRequest",
                 ...headers,
             },
-        }).then((response) => {
-            return onSuccess(response)
-        }).catch((error) => {
-            if (error.response?.status === 422) {
-                const errors: Errors = {}
-                const responseErrors = error.response.data?.errors || {}
-                if (Object.keys(responseErrors).length > 0) {
-                    Object.keys(responseErrors).forEach((name) => {
-                        errors[name] = responseErrors[name][0]
-                    })
-                    return onErrors(errors)
-                }
-            }
-            return onError(error)
-        }).then(() => {
-            return onFinish()
-        }).catch((error) => {
-            return Promise.reject(error)
+        })
+
+        this.handleResponse(response, {
+            onSuccess: onSuccess,
+            onErrors: onErrors,
+            onError: onError,
+            onFinish: onFinish,
         })
     }
 
@@ -86,5 +75,41 @@ export class Http {
 
     public delete(url: URL | string, options: Exclude<VisitOptions, "method"> = {}): void {
         return this.visit(url, { ...options, method: "delete" })
+    }
+
+    public call(callback: (data: any) => Promise<AxiosResponse<any, any>>, data: RequestPayload = {}, options: ResponseOption={}): void {
+        const response = callback(data)
+
+        this.handleResponse(response, options)
+    }
+
+    private handleResponse(
+        axios: Promise<AxiosResponse<any, any>>,
+        {
+            onSuccess = () => {},
+            onErrors = () => {},
+            onError = () => {},
+            onFinish = () => {},
+        }: ResponseOption,
+    ) {
+        axios.then((response) => {
+            return onSuccess(response)
+        }).catch((error) => {
+            if (error.response?.status === 422) {
+                const errors: Errors = {}
+                const responseErrors = error.response.data?.errors || {}
+                if (Object.keys(responseErrors).length > 0) {
+                    Object.keys(responseErrors).forEach((name) => {
+                        errors[name] = responseErrors[name][0]
+                    })
+                    return onErrors(errors)
+                }
+            }
+            return onError(error)
+        }).then(() => {
+            return onFinish()
+        }).catch((error) => {
+            return Promise.reject(error)
+        })
     }
 }
