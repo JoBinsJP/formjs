@@ -78,5 +78,5 @@ export type ResponseOption = Partial<{
     onErrors: GlobalEventCallback<"errors">
     onError: GlobalEventCallback<"error">
 }>
-
+export type HttpResponse = AxiosResponse
 export type Instance = AxiosInstance
