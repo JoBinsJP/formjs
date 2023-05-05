@@ -18,7 +18,8 @@ It can be used to make an API call.
 
     http.post("api/errors", {}, {
         onSuccess:(response)=>{},
-        onError: (errors) => {},
+        onErrors: (errors) => {},
+        onError: (error) => {},
         onFinish: () => {},
     })
 </script>
@@ -105,6 +106,15 @@ It can be used with yup to validate form.
         email: "",
         firstname: "",
     }, {schema: userStoreSchema})
+
+    const submit = async ()=>{
+        // validate all methods 
+        const isValid = await form.validate()
+      
+        if(isValid){
+            form.post('/some-endpoints')
+        }
+    }
 </script>
 
 // Somewhere in template

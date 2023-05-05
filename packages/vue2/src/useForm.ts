@@ -2,7 +2,7 @@ import {http, Instance, Method, ResponseOption, VisitOptions} from "formjs-core"
 import {AxiosResponse} from "axios"
 import cloneDeep from "lodash.clonedeep"
 import isEqual from "lodash.isequal"
-import Vue from "vue"
+import { reactive, watch } from 'vue'
 import {ObjectSchema} from "yup"
 import debounce from "./debounce"
 
@@ -11,39 +11,22 @@ interface FormProps<TForm> {
     errors: Record<keyof TForm, string>
     hasErrors: boolean
     processing: boolean
-
     data(): TForm
-
     transform(callback: (data: TForm) => object): this
-
     defaults(): this
-
     defaults(field: keyof TForm, value: string): this
-
     defaults(fields: Record<keyof TForm, string>): this
-
     reset(...fields: (keyof TForm)[]): this
-
     setError(field: keyof TForm, value: string): this
-
     setError(errors: Record<keyof TForm, string>): this
-
     clearErrors(...fields: (keyof TForm)[]): this
-
     validate(): void
-
     validate(field: keyof TForm): void
-
     submit(method: Method, url: string, options?: Partial<VisitOptions>): void
-
     get(url: string, options?: Partial<VisitOptions>): void
-
     post(url: string, options?: Partial<VisitOptions>): void
-
     put(url: string, options?: Partial<VisitOptions>): void
-
     delete(url: string, options?: Partial<VisitOptions>): void
-
     call(callback: () => Promise<AxiosResponse<any, any>>, options?: Partial<ResponseOption>): void
 }
 
@@ -52,17 +35,17 @@ type FormOptions<TForm> = {
     schema?: ObjectSchema<Record<keyof TForm, string>>,
     instance?: Instance
 }
-export default function useForm<TForm>(_data: TForm): Form<TForm>
-export default function useForm<TForm>(_data: TForm, _options: FormOptions<TForm>): Form<TForm>
+export default function useForm<TForm>(data: TForm): Form<TForm>
+export default function useForm<TForm>(data: TForm, options: FormOptions<TForm>): Form<TForm>
 export default function useForm<TForm>(...args): Form<TForm> {
     const data = args[0] || {}
-    const _options = args[1] || {}
-    const validationSchema = _options.schema
-    const instance = _options.instance
+    const options = args[1] || {}
+    const validationSchema = options.schema
+    const instance = options.instance
     let defaults = cloneDeep(data)
     let transform = (data) => data
 
-    const form = Vue.observable({
+    const form = reactive({
         ...data,
         isDirty: false,
         errors: {},
@@ -220,17 +203,13 @@ export default function useForm<TForm>(...args): Form<TForm> {
         },
     })
 
-    new Vue({
-        created() {
-            this.$watch(
-                () => form,
-                () => {
-                    form.isDirty = !isEqual(form.data(), defaults)
-                },
-                {immediate: true, deep: true},
-            )
+    watch(
+        form,
+        (newValue) => {
+            form.isDirty = !isEqual(form.data(), defaults)
         },
-    })
+        { immediate: true, deep: true },
+    )
 
     return form
 }
