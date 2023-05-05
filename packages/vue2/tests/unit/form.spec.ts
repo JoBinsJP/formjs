@@ -1,9 +1,9 @@
-import { default as Axios } from "axios"
-import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
-import { object, string } from "yup"
-import { useForm } from "../../src"
-import { server } from "../mocks/server"
-import { UserService } from "../mocks/userService"
+import {default as Axios} from "axios"
+import {afterAll, afterEach, beforeAll, expect, it} from "vitest"
+import {object, string} from "yup"
+import {useForm} from "../../src"
+import {server} from "../mocks/server"
+import {UserService} from "../mocks/userService"
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
@@ -40,13 +40,17 @@ it("onErrors callback is called on validation Error", () => new Promise<void>(do
     let error = false
 
     form.post("/api/errors", {
-        onSuccess: (response) => {success = true},
+        onSuccess: (response) => {
+            success = true
+        },
         onErrors: (_errors) => {
             expect(form.errors.email).toBe("The email is a required item.")
             expect(form.errors.name).toBe("The name is a required Item.")
             errors = true
         },
-        onError: (_error) => {error = true},
+        onError: (_error) => {
+            error = true
+        },
         onFinish: () => {
             expect(success).toBe(false)
             expect(errors).toBe(true)
@@ -67,9 +71,15 @@ it("onError callback is called on 404 not found", () => new Promise<void>(done =
     let error = false
 
     form.post("/api/404-not-found", {
-        onSuccess: (response) => {success = true},
-        onErrors: (_errors) => {errors = true},
-        onError: (_error) => {error = true},
+        onSuccess: (response) => {
+            success = true
+        },
+        onErrors: (_errors) => {
+            errors = true
+        },
+        onError: (_error) => {
+            error = true
+        },
         onFinish: () => {
             expect(success).toBe(false)
             expect(errors).toBe(false)
@@ -90,7 +100,7 @@ it("form with custom axios instance", () => new Promise<void>(done => {
     const form = useForm({
         email: null,
         name: null,
-    }, { instance: instance })
+    }, {instance: instance})
 
     form.post("/api/users", {
         onSuccess: () => {
@@ -119,21 +129,21 @@ it("validates form with schema", async () => {
 
     const form = useForm({
         email: "admi",
-    }, { schema: userSchema })
+    }, {schema: userSchema})
 
     await form.validate("email")
 
     expect(form.errors.email).toBe("email must be a valid email")
 })
 
-it("form sends data with validation schema",()=> new Promise<void>(done => {
+it("form sends data with validation schema", () => new Promise<void>(done => {
     const userSchema = object({
         email: string().email(),
     })
 
     const form = useForm({
         email: "admi",
-    }, { schema: userSchema })
+    }, {schema: userSchema})
 
     form.post("/api/users", {
         onSuccess: () => {
@@ -147,9 +157,22 @@ it("can call custom service as ", () => new Promise<void>(done => {
         email: "admi",
     })
 
-    form.call(UserService.getUsers,{
+    form.call(UserService.getUsers, {
         onSuccess: (response) => {
             done()
         },
+    })
+}))
+
+it("call method can set validation", () => new Promise<void>(done => {
+    const form = useForm({
+        email: "admi",
+    })
+
+    form.call(UserService.getErrors, {
+        onFinish: () => {
+            expect(form.errors.email).toBe("The email is a required item.")
+            done()
+        }
     })
 }))
