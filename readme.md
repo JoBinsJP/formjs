@@ -109,9 +109,9 @@ It can be used with yup to validate form.
 
     const submit = async ()=>{
         // validate all methods 
-        const isValid = await form.validate()
+        await form.validate()
       
-        if(isValid){
+        if(!form.hasErrors){
             form.post('/some-endpoints')
         }
     }
