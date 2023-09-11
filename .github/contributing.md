@@ -1,5 +1,9 @@
 ##### Build Packages
 ```bash
+npm install --workspace=packages --if-present
+```
+
+```bash
 npm run build --workspace=packages --if-present
 ```
 
