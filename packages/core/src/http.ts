@@ -35,8 +35,8 @@ export class Http {
             params: method === "get" ? data : {},
             headers: {
                 Accept: "application/json",
-                "Content-Type": "application/json",
                 "X-Requested-With": "XMLHttpRequest",
+                "X-Formjs": true,
                 ...headers,
             },
         })
