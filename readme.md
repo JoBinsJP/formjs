@@ -1,5 +1,5 @@
 # formjs
-Formjs is a wrapper around axios and Form helper, highly inspired from [InertiaJS](https://inertiajs.com/) for vue2. 
+Formjs is a wrapper around axios and Form helper, highly inspired from [InertiaJS](https://inertiajs.com/) for both vue 2 & 3. 
 It's a tool to use to handle form and API calls when building client-side application.
 
 # Demo
