@@ -4,6 +4,7 @@ import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
 import { Errors, http } from "../../src"
 import { server, waitForRequest } from "../mocks/server"
 import { UserService } from "../mocks/userService"
+import {client} from "../../src";
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
@@ -81,6 +82,25 @@ it("custom axios instance can be configured", async () => {
     http.post("/api/users", {}, {
         instance: instance,
     })
+
+    const request = (await pendingRequest) as MockedRequest
+    expect(request.url.href).toBe("https://custom-config.com/api/users")
+    expect(request.headers.get("Authorization")).toBe("Bearer token")
+})
+
+it("axios can be import to configure", async () => {
+    const pendingRequest = waitForRequest("post", "https://custom-config.com/api/users")
+
+    const instance = Axios.create({
+        baseURL: "https://custom-config.com",
+        headers: {
+            Authorization: `Bearer token`,
+        },
+    })
+
+    client.use(instance)
+
+    http.post("/api/users", {})
 
     const request = (await pendingRequest) as MockedRequest
     expect(request.url.href).toBe("https://custom-config.com/api/users")

@@ -1,8 +1,9 @@
-import { AxiosResponse, default as Axios } from "axios"
+import { AxiosResponse } from "axios"
 import { hasFiles } from "./files"
 import { objectToFormData } from "./formData"
 import { Errors, RequestPayload, ResponseOption, VisitOptions } from "./types"
 import { hrefToUrl, urlWithoutHash } from "./url"
+import {client} from "./client";
 
 export class Http {
     public visit(
@@ -16,7 +17,7 @@ export class Http {
             onSuccess = () => {},
             onErrors = () => {},
             onError = () => {},
-            instance = Axios,
+            instance = client.axios(),
         }: VisitOptions = {},
     ): void {
         if ((hasFiles(data) || forceFormData) && !(data instanceof FormData)) {
