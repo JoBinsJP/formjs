@@ -1,10 +1,9 @@
 import { AxiosResponse, default as Axios } from "axios"
 import { MockedRequest } from "msw"
 import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
-import { Errors, http } from "../../src"
+import { Errors, http, client } from "../../src"
 import { server, waitForRequest } from "../mocks/server"
 import { UserService } from "../mocks/userService"
-import {client} from "../../src";
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
@@ -59,8 +58,8 @@ it("it calls errors and finish method in validation errors", () => new Promise<v
 it("can config the axios default", async () => {
     const pendingRequest = waitForRequest("post", "https://api.example.com/api/users")
 
-    Axios.defaults.baseURL = "https://api.example.com"
-    Axios.defaults.headers.common["Authorization"] = `Bearer token`
+    client.axios().defaults.baseURL = "https://api.example.com"
+    client.axios().defaults.headers.common["Authorization"] = `Bearer token`
 
     http.post("api/users")
 

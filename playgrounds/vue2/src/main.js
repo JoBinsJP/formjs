@@ -1,15 +1,15 @@
-import axios from "axios"
+import Axios from "axios"
 import { createPinia, PiniaVuePlugin } from "pinia"
 import Vue from "vue"
 import App from "./App.vue"
+import {client} from "formjs-vue2"
 
-axios.interceptors.response.use(res => {
-        return res
-    },
-    res => {
-        throw res
-    },
-)
+// const axios = Axios.create()
+client.axios().interceptors.response.use((response) => {
+    return response;
+},(err) => {
+    return Promise.reject(err);
+})
 
 Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
