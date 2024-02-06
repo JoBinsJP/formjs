@@ -5,6 +5,7 @@ import { afterAll, afterEach, beforeAll, expect, it } from "vitest"
 import Error from "../fixtures/Error.vue"
 import Form from "../fixtures/Form.vue"
 import { server, waitForRequest } from "../mocks/server"
+import useForm from "../../src/useForm";
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())

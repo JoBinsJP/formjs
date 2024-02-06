@@ -131,6 +131,9 @@ It can be used with yup to validate form.
 ## Custom Axios instance
 Sometimes it is required to configure custom request.
 ```js
+import {useForm} from "formjs-vue2"
+import {default as Axios} from "axios";
+
 const instance = Axios.create({ 
     baseURL: "https://custom-config.com", 
     headers: { 
@@ -142,13 +145,19 @@ const form = useForm({
     email: null,
     name: null,
 }, { instance: instance })
+```
 
-// In http
-const data = {}
-http.post("api/users", data , {
+##### With `http`
+
+```js
+import {http} from "formjs-vue2"
+
+http.post("api/users", {} , {
     instance: instance,
 })
 ```
+
+
 
 ## License
 

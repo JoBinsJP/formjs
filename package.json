@@ -1,6 +1,13 @@
 {
-    "version": "1.0.3",
+    "private": true,
+    "scripts": {
+        "build": "npm run build --workspaces",
+        "link": "npm link --workspaces",
+        "test": "npm run test --workspaces --if-present"
+    },
     "workspaces": [
-        "packages/*"
+        "packages/core",
+        "packages/vue2",
+        "playgrounds/vue2"
     ]
 }

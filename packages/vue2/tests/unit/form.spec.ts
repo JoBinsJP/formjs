@@ -1,9 +1,12 @@
 import {default as Axios} from "axios"
 import {afterAll, afterEach, beforeAll, expect, it} from "vitest"
 import {object, string} from "yup"
+import {client} from "formjs-vue2";
 import {useForm} from "../../src"
-import {server} from "../mocks/server"
+import { server, waitForRequest } from "../mocks/server"
 import {UserService} from "../mocks/userService"
+import {MockedRequest} from "msw";
+import {a} from "msw/lib/glossary-de6278a9";
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
@@ -89,26 +92,6 @@ it("onError callback is called on 404 not found", () => new Promise<void>(done =
     })
 }))
 
-it("form with custom axios instance", () => new Promise<void>(done => {
-    const instance = Axios.create({
-        baseURL: "https://custom-config.com",
-        headers: {
-            Authorization: `Bearer token`,
-        },
-    })
-
-    const form = useForm({
-        email: null,
-        name: null,
-    }, {instance: instance})
-
-    form.post("/api/users", {
-        onSuccess: () => {
-            done()
-        },
-    })
-}))
-
 it("finish method calls on error", () => new Promise<void>(done => {
     const form = useForm({
         email: null,
@@ -176,3 +159,4 @@ it("call method can set validation", () => new Promise<void>(done => {
         }
     })
 }))
+

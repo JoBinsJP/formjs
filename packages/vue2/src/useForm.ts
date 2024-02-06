@@ -1,10 +1,11 @@
-import {http, Instance, Method, ResponseOption, VisitOptions} from "formjs-core"
+import { Instance, Method, ResponseOption, VisitOptions} from "formjs-core"
 import {AxiosResponse} from "axios"
 import cloneDeep from "lodash.clonedeep"
 import isEqual from "lodash.isequal"
 import { reactive, watch } from 'vue'
 import {ObjectSchema} from "yup"
 import debounce from "./debounce"
+import {client, http} from "./index";
 
 interface FormProps<TForm> {
     isDirty: boolean

@@ -1,5 +1,4 @@
 import { http, useForm } from "formjs-vue2"
-import instance from "vue/src/core/instance/index.js"
 import { object, string } from "yup"
 import { useUserStore } from "../stores/users.js"
 
@@ -45,7 +44,7 @@ export default function useUser() {
     }
 
     const invalid = () => {
-        form.post("/api/errors")
+        form.post("/api/invalid")
     }
 
     const success = async () => {

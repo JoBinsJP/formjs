@@ -1,6 +1,12 @@
 import { rest } from "msw"
 
 export const handlers = [
+    rest.post("api/419", (req, res, ctx) => {
+        return res(
+            ctx.status(419),
+        )
+    }),
+
     rest.post("api/users", (req, res, ctx) => {
         return res(
             ctx.status(200),

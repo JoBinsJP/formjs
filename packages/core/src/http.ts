@@ -1,8 +1,22 @@
-import { AxiosResponse, default as Axios } from "axios"
+import {AxiosInstance, AxiosResponse, default as Axios} from "axios"
 import { hasFiles } from "./files"
 import { objectToFormData } from "./formData"
-import { Errors, RequestPayload, ResponseOption, VisitOptions } from "./types"
+import { Errors, RequestPayload, ResponseOption, VisitOptions, Client } from "./types"
 import { hrefToUrl, urlWithoutHash } from "./url"
+
+let axiosClient: AxiosInstance = Axios.create()
+
+export const client: Client = {
+    use(axios) {
+        axiosClient = axios
+
+        return client
+    },
+
+    axios() {
+        return axiosClient
+    }
+}
 
 export class Http {
     public visit(
@@ -16,7 +30,7 @@ export class Http {
             onSuccess = () => {},
             onErrors = () => {},
             onError = () => {},
-            instance = Axios,
+            instance = client.axios(),
         }: VisitOptions = {},
     ): void {
         if ((hasFiles(data) || forceFormData) && !(data instanceof FormData)) {
@@ -28,7 +42,8 @@ export class Http {
 
         const _url = urlWithoutHash(url).href
 
-        const response = instance(_url, {
+        const response = instance.request({
+            url: _url,
             ...defaultConfig,
             method,
             data: method === "get" ? {} : data,

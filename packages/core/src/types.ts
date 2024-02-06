@@ -80,3 +80,8 @@ export type ResponseOption = Partial<{
 }>
 export type HttpResponse = AxiosResponse
 export type Instance = AxiosInstance
+
+export interface Client {
+    use(axios: AxiosInstance): Client,
+    axios(): AxiosInstance,
+}
