@@ -30,14 +30,13 @@ export class Http {
             onSuccess = () => {},
             onErrors = () => {},
             onError = () => {},
-            instance = undefined,
+            instance = client.axios(),
         }: VisitOptions = {},
     ): void {
         if ((hasFiles(data) || forceFormData) && !(data instanceof FormData)) {
             data = objectToFormData(data)
         }
 
-        instance = instance ?? client.axios()
         const defaultConfig = instance?.defaults
         let url = typeof href === "string" ? hrefToUrl(href, defaultConfig?.baseURL) : href
 

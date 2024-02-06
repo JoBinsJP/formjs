@@ -6,8 +6,10 @@ import {client} from "formjs-vue2"
 
 // const axios = Axios.create()
 client.axios().interceptors.response.use((response) => {
+    console.log('hello')
     return response;
 },(err) => {
+    console.log('Intercepter is working fine')
     return Promise.reject(err);
 })
 

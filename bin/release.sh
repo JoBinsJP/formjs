@@ -1,6 +1,16 @@
-npm run install --workspace=packages --if-present
-npm version patch --workspace=packages/core --if-present
-npm publish --workspace=packages/core --if-present
+#!/usr/bin/env bash
 
-npm version patch --workspace=packages/vue2 --if-present
-npm publish --workspace=packages/vue2 --if-present
+set -e
+
+# Make sure the release tag is provided.
+if (( "$#" != 1 ))
+then
+    echo "Version type has to be provided: major|minor|patch."
+
+    exit 1
+fi
+
+npm version $1 \
+    --workspace=packages/core \
+    --workspace=packages/vue2 \
+    --workspace=playgrounds/vue2

@@ -42,7 +42,7 @@ export default function useForm<TForm>(...args): Form<TForm> {
     const data = args[0] || {}
     const options = args[1] || {}
     const validationSchema = options.schema
-    const instance = options.instance ?? client.axios()
+    const instance = options.instance
     let defaults = cloneDeep(data)
     let transform = (data) => data
 
