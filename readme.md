@@ -16,26 +16,156 @@ yarn add formjs-vue2
 
 ## Uses
 
-#### API call
-It can be used to make an API call.
-```vue
+### API call
+It is possible to perform API call using formjs with the help of `http.visit()` method.
 
+```vue
 <script setup>
     import { http } from "formjs-vue2"
 
-    http.post("api/errors", {}, {
+    http.visit(url,{
+        method: 'get',
+        data: {},
+        headers: {},
+        forceFormData: false,
         onSuccess:(response)=>{},
         onErrors: (errors) => {},
         onError: (error) => {},
         onFinish: () => {},
+        instance: axios(),
+    })
+</script>
+```
+However, it's usually easier to use one of formjs's quick shortcut methods. These methods have all the same options as `http.visit()`.
+
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+
+    http.get(url, data, options)
+    http.post(url, data, options)
+    http.put(url, data, options)
+    http.delete(url, options)
+</script>
+```
+
+> Uploading files via put is not supported in Laravel. Instead, make the request via post, including a _method field set to put. This is called form [method spoofing](https://laravel.com/docs/8.x/routing#form-method-spoofing).
+
+### Data
+You may use the `data` option to add data to the request.
+
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+
+    http.visit('/users', {
+        method: 'post',
+        data: {
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+        },
     })
 </script>
 ```
 
+For convenience, the `get()`, `post()` and `put()` methods all accept data as their second argument.
 
-#### Form
 ```vue
+<script setup>
+    import { http } from "formjs-vue2"
 
+    http.post('/users', {
+        data: {
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+        },
+    })
+</script>
+```
+
+### API Responses
+formjs provides four different callbacks `onSuccess`, `onErrors`, `onError` and `onFinish` to handle the API responses. 
+
+#### onSuccess
+It is called when response status is in 200 (success) range. It gets response as callback argument.
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+
+    http.get('/users',data, {
+        onSuccess: (response)=>{
+            console.log('I am success')
+        }
+    })
+</script>
+```
+
+#### onErrors
+formjs provides dedicated callback to handle validation errors. Any API response return with 422 status will be captured by `onErrors` callback. The validation errors response should be in Laravel's [error response format](https://laravel.com/docs/10.x/validation#validation-error-response-format)
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+
+    http.get('/users',data, {
+        onErrors: (errors)=>{
+            console.log(errors)
+        }
+    })
+</script>
+```
+
+#### onError
+It is called when the server return response of 400 to 500 status range. 
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+
+    http.get('/users',data, {
+        onError: (error)=>{
+            console.log('something went wrong.')
+        }
+    })
+</script>
+```
+
+#### onFinish
+It is called everytime when the API call is completed, no matter what the response is. This callback can be used to track the loading state of a API call.
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+    import {ref} from "vue"
+    
+    const isLoading = ref(false);
+
+    const getUsers = ()=>{
+        isLoading.value = true;
+        http.get('/users',data, {
+            onFinish: ()=>{
+                isLoading.value= false
+            }
+        })   
+    }
+</script>
+```
+
+### Custom Headers
+The `headers` option allows you to add custom headers to a request.
+
+```vue
+<script setup>
+    import { http } from "formjs-vue2"
+
+    http.post('/users', data, {
+        headers: {
+            'Custom-Header': 'value',
+        },
+    })
+</script>
+```
+
+### Form
+The primary use case of formjs is to ease the form handling by reducing amount of boilerplate code needed for form submissions.
+```vue
 <template>
     <div>
         <input type="email" v-model="form.email">
@@ -50,46 +180,37 @@ It can be used to make an API call.
     const form = useForm({
         email: "",
     })
-
-    form.post("api/users", {}, {
-        onSuccess: (response) => {
-            // success 
-        },
-        onErrors: (errors) => {
-            // 422 status server validation errors
-        },
-        onError: (error) => {
-            // Other than 422 status errors
-        },
-        onFinish: () => {
-            // The request is completed.
-        },
-    })
 </script>
 ```
 
+To submit the form, you may use `get`, `post`, `put`, and `delete` methods.
 
-## Validation Errors
-It requires to have errors in [Laravel standard](https://laravel.com/docs/9.x/validation#validation-error-response-format) json error format. In which each key has error messages in array 
-format. 
-
-```json
-{
-    "message": "The email field is required. (and 2 more errors)",
-    "errors": {
-        "email": [
-            "The email field is required.",
-            "The email must be a valid email address."
-        ],
-        "name": [
-            "The name field is required."
-        ],
-    }
-}
+```js
+form.submit(method, url, options)
+form.get(url, options)
+form.post(url, options)
+form.put(url, options)
+form.patch(url, options)
+form.delete(url, options)
 ```
 
-## Frontend validations
-It can be used with yup to validate form.
+The submit method supports all the above [visit options](https://github.com/JoBinsJP/formjs/tree/improve-docs-1?tab=readme-ov-file#api-call), such as `headers`, `forceFormData` and all the event 
+callback, which can be helpful for performing the tasks based on the response of submission. For example, you might use the `onSuccess` callback to reset inputs to their original state.
+
+```js
+form.post("/users", {
+    onSuccess: () => form.reset(),
+})
+```
+
+### Server Side Validation
+`useForm` composable also provides the `onErrors` callback for 422 status response. The callback shares the same signatures as above define for [http.visit()](https://github.com/JoBinsJP/formjs/tree/improve-docs-1?tab=readme-ov-file#api-responses). 
+Besides that you generally don't require to implement this method manually, as `useForm` automatically maps the errors 
+into form. You may access the errors for a field with `form.errors.{field}`. For example, error for an input `email` can access with `form.errors.email`. However, the validation errors response 
+should be in Laravel's [error response format](https://laravel.com/docs/10.x/validation#validation-error-response-format)
+
+### Frontend validations
+formjs can be used with [yup](https://github.com/jquense/yup) to validate data in frontend side. 
 
 ```vue
 <template>
