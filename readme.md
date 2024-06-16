@@ -1,5 +1,13 @@
-# formjs
-Formjs is a wrapper around axios and Form helper, highly inspired from [InertiaJS](https://inertiajs.com/) for both vue 2 & 3. 
+<h1 align="center">formjs</h1>  
+<p align="center">  
+<a href="https://github.com/JoBinsJP/formjs/actions"><img src="https://github.com/JoBinsJP/formjs/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
+<a href="https://www.npmjs.com/package/formjs-vue2"><img src="https://img.shields.io/npm/dm/formjs-vue2" alt="Total Downloads"></a>
+<a href="https://www.npmjs.com/package/formjs-vue2"><img src="https://img.shields.io/npm/v/formjs-vue2" alt="Latest Stable Version"></a>
+<a href="https://www.npmjs.com/package/formjs-vue2"><img src="https://img.shields.io/npm/l/formjs-vue2" alt="License"></a>
+</p>
+
+# Introduction
+formjs is a wrapper around axios and a form helper, highly inspired from [InertiaJS](https://inertiajs.com/) for both vue 2 & 3. 
 It's a tool to use to handle form and API calls when building client-side application.
 
 # [Demo](https://stackblitz.com/edit/vitejs-vite-4vj3mb?file=src/App.vue)
